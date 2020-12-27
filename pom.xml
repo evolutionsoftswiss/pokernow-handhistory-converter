@@ -57,7 +57,7 @@
 				</configuration>
 				<executions>
 					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<id>make-jar-with-dependencies</id> <!-- this is used for inheritance merges -->
 						<phase>package</phase> <!-- bind to the packaging phase -->
 						<goals>
 							<goal>single</goal>
@@ -69,6 +69,15 @@
 					              <mainClass>ch.evolutionsoft.poker.pokernow.PokernowHandHistoryConverter</mainClass>
 					            </manifest>
 							</archive>
+						</configuration>
+					</execution>
+					<execution>
+						<id>make-assembly</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
 							<descriptor>assembly.xml</descriptor>
 						</configuration>
 					</execution>

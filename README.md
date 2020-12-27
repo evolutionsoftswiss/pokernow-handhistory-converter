@@ -11,9 +11,9 @@ Quick Start
 -----------
 You need a more or less recent Java SE Runtime Environment to run the released program versions. Version 8+ should work.
 
-For a quick start you can unzip the release version in a folder where you've already got one or more csv's from pokernow.club.
+For a quick start you can unzip the release version (without subdirectory, but directly all three files) in a folder where you've already got one or more csv's from pokernow.club.
 
-Execute from the directory with containing 'handhistory-converter-0.1.0-jar-with-dependencies.jar'
+Execute from the directory with containing 'handhistory-converter-0.1.0-jar-with-dependencies.jar' and the two properties files:
 
 ```
 java -jar handhistory-converter-0.1.0-jar-with-dependencies.jar
