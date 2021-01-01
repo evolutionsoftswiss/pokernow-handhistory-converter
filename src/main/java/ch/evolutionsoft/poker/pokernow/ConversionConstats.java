@@ -15,14 +15,14 @@ public final class ConversionConstats {
   public static final String ONE_OR_MORE_DIGITS_GROUP_REGEX = "(\\d+)(\\.\\d{1,2})?";
   public static final String ONE_OR_MORE_DIGITS_AND_CHARS_REGEX = "(\\d+)(\\.\\d{1,2})?( and go all in)?\".+";
   public static final String NEWLINE = "\n";
-  public static final String DOUBLE_POINT = ":";
+  public static final char DOUBLE_POINT = ':';
   public static final String FIRST_REGEX_GROUP_MATCH = "$1";
   public static final String FIRST_AND_SECOND_REGEX_GROUP_MATCH = "$1$2";
   public static final char COMMA_CHAR = ',';
   public static final String CLOSED_BRACKET = "]";
   public static final String OPEN_BRACKET = "[";
 
-  public static final String AMOUNT_DOUBLE_FORMAT = "%.1f";
+  public static final String AMOUNT_DOUBLE_FORMAT = "%.4f";
 
   public static final String DOLLAR_SIGN = "$";
 

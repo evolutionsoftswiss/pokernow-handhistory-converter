@@ -55,8 +55,8 @@ public class PokernowSingleHandConverter {
     BufferedReader bufferedReader = new BufferedReader(new StringReader(singleHandHistoryBase));
     String singleHandHistoryLine = bufferedReader.readLine();
 
-    String handNumber = singleHandHistoryLine.substring(singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR) + 1, 
-        singleHandHistoryLine.indexOf("  ", singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR)));
+    String handNumber = readHandNumber(singleHandHistoryLine);
+    
     String gameType = singleHandHistoryLine.substring(
         singleHandHistoryLine.indexOf('(') + 1, singleHandHistoryLine.indexOf(')'));
     String timeString = singleHandHistoryLine.substring(
@@ -129,6 +129,7 @@ public class PokernowSingleHandConverter {
     String smallBlindLine = StringUtils.EMPTY;
     String smallBlindPlayerName = StringUtils.EMPTY;
     if (indexOfSmallBlindPoster >= 0) {
+      singleHandHistoryLine = singleHandHistoryLine.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
       smallBlindPlayerName = singleHandHistoryLine.
           substring(0, indexOfSmallBlindPoster);
       smallBlindLine = singleHandHistoryLine.
@@ -138,10 +139,11 @@ public class PokernowSingleHandConverter {
       lastRaiseAmountByPlayer.put(smallBlindPlayerName, smallBlindAmount);
     }
     singleHandHistoryLine = bufferedReader.readLine();
+    singleHandHistoryLine = singleHandHistoryLine.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
     String bigBlindPlayerName = singleHandHistoryLine.
         substring(0, singleHandHistoryLine.indexOf(BIG_BLIND_PREFIX));
     String bigBlindLine = singleHandHistoryLine.
-        replaceAll(" posts a big blind of " + ONE_OR_MORE_DIGITS_GROUP_REGEX, ": posts big blind \\$" + FIRST_AND_SECOND_REGEX_GROUP_MATCH);
+        replaceAll(BIG_BLIND_PREFIX + ONE_OR_MORE_DIGITS_GROUP_REGEX, ": posts big blind \\$" + FIRST_AND_SECOND_REGEX_GROUP_MATCH);
     bigBlindLine = ConversionUtils.stripDateAndEntryOrderFromCsv(bigBlindLine);
     
     lastRaiseAmountByPlayer.put(bigBlindPlayerName, bigBlindAmount);
@@ -151,8 +153,10 @@ public class PokernowSingleHandConverter {
     String missingSmallBlindsLines = StringUtils.EMPTY;
     while (singleHandHistoryLine.contains(MISSING_SMALL_BLIND_PREFIX)) {
 
+      singleHandHistoryLine = singleHandHistoryLine.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
       String missingSmallBlindLine = singleHandHistoryLine.
-          replaceAll(" posts a missing small blind of (\\d+(\\.\\d{2})?)", ": posts the ante \\$" + FIRST_AND_SECOND_REGEX_GROUP_MATCH);
+          replaceAll(MISSING_SMALL_BLIND_PREFIX + ONE_OR_MORE_DIGITS_GROUP_REGEX, ": posts the ante \\$" + FIRST_AND_SECOND_REGEX_GROUP_MATCH);
+
       missingSmallBlindLine = ConversionUtils.stripDateAndEntryOrderFromCsv(missingSmallBlindLine);
       
       missingSmallBlindsLines += missingSmallBlindLine + System.lineSeparator();
@@ -164,6 +168,7 @@ public class PokernowSingleHandConverter {
     String missingBigBlindLine = StringUtils.EMPTY;
     if (singleHandHistoryLine.contains(MISSING_BIG_BLIND_PREFIX)) {
 
+      singleHandHistoryLine = singleHandHistoryLine.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
       String missingBigBlindName = singleHandHistoryLine.
           substring(0, singleHandHistoryLine.indexOf(MISSING_BIG_BLIND_PREFIX));
       missingBigBlindLine = singleHandHistoryLine.
@@ -179,6 +184,7 @@ public class PokernowSingleHandConverter {
     String straddleLine = StringUtils.EMPTY;
     if (singleHandHistoryLine.contains(STRADDLE_PREFIX)) {
 
+      singleHandHistoryLine = singleHandHistoryLine.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
       straddlePlayerName = singleHandHistoryLine.
           substring(0, singleHandHistoryLine.indexOf(STRADDLE_PREFIX));
       straddleLine = singleHandHistoryLine.
@@ -200,7 +206,7 @@ public class PokernowSingleHandConverter {
     convertedSingleHandHistory += bigBlindLine + System.lineSeparator();
     
     if (!missingSmallBlindsLines.isEmpty()) {
-    
+      
       convertedSingleHandHistory += missingSmallBlindsLines;
     }
     
@@ -328,6 +334,12 @@ public class PokernowSingleHandConverter {
     return convertedSingleHandHistory;
   }
 
+  String readHandNumber(String singleHandHistoryLine) {
+
+    return singleHandHistoryLine.substring(singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR) + 1, 
+        singleHandHistoryLine.indexOf("  ", singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR)));
+  }
+
   String createConvertedHandSummary(String buttonPlayerName, String playerSummary, String smallBlindPlayerName,
 
       String bigBlindPlayerName, String straddlePlayerName, String endBoard, List<String> winningAmounts,
@@ -353,9 +365,9 @@ public class PokernowSingleHandConverter {
     return gameSummary;
   }
   
-  int calculateTotalPotFromWinnings(List<String> winningAmounts) {
+  double calculateTotalPotFromWinnings(List<String> winningAmounts) {
     
-    int totalPot = 0;
+    double totalPot = 0;
     
     for (String winningAmount : winningAmounts) {
     
@@ -500,6 +512,7 @@ public class PokernowSingleHandConverter {
     String raisingPlayer = singleHandHistoryLine.substring(0, singleHandHistoryLine.indexOf(RAISES_TO));
     
     double raiseAmount = Double.parseDouble(raiseTotal) - latestBetTotalAmount;
+    double roundedRaiseAmount = roundToCents(raiseAmount);
     latestBetTotalAmount = Double.parseDouble(raiseTotal);
 
     if (lastRaiseAmountByPlayer.containsKey(raisingPlayer)) {
@@ -508,7 +521,7 @@ public class PokernowSingleHandConverter {
     lastRaiseAmountByPlayer.put(raisingPlayer, latestBetTotalAmount);
     
     gameAction = singleHandHistoryLine.replace(RAISES_ACTION, DOUBLE_POINT + RAISES_ACTION);
-    String replacement = RAISES_ACTION + DOLLAR_CHAR + raiseAmount + " to $";
+    String replacement = RAISES_ACTION + DOLLAR_CHAR + roundedRaiseAmount + " to $";
     gameAction = gameAction.replace(RAISES_TO, replacement);
     gameAction = gameAction.replace(AND_GO_ALL_IN, StringUtils.EMPTY);
     return gameAction;
@@ -524,7 +537,8 @@ public class PokernowSingleHandConverter {
     if (lastRaiseAmountByPlayer.containsKey(callingPlayer)) {
       
       double callPart = callTotalAmount - lastRaiseAmountByPlayer.get(callingPlayer);
-      gameAction = singleHandHistoryLine.replaceFirst(CALLS + ONE_OR_MORE_DIGITS_REGEX, CALLS + callPart);
+      double roundedCallPart = roundToCents(callPart);
+      gameAction = singleHandHistoryLine.replaceFirst(CALLS + ONE_OR_MORE_DIGITS_REGEX, CALLS + roundedCallPart);
     }
     
     lastRaiseAmountByPlayer.remove(callingPlayer);
@@ -535,6 +549,11 @@ public class PokernowSingleHandConverter {
     return gameAction;
   }
 
+  double roundToCents(double calculatedDouble) {
+    
+    return Math.round(100 * calculatedDouble) / 100.0;
+  }
+  
   public boolean isReadYourHoleCards() {
     return readYourHoleCards;
   }

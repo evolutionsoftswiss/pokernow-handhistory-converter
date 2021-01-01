@@ -19,12 +19,14 @@ public class ConversionUtils {
     
     String datetimeDigits = datetime.replace("-", StringUtils.EMPTY);
     datetimeDigits = datetimeDigits.replace(TIME_PREFIX, StringUtils.EMPTY);
-    datetimeDigits = datetimeDigits.replace(DOUBLE_POINT, StringUtils.EMPTY);
+    datetimeDigits = datetimeDigits.replace(String.valueOf(DOUBLE_POINT), StringUtils.EMPTY);
     
     return Long.parseLong(datetimeDigits);
   }
   
   static double readSmallBlind(String handHistory, double lastSmallBlind) {
+    
+    handHistory = handHistory.replace(AND_GO_ALL_IN, StringUtils.EMPTY);
     
     int indexOfFirstSmallBlindPrefix = handHistory.indexOf(SMALL_BLIND_PREFIX);
     int indexOfNextNewLine = handHistory.indexOf(NEWLINE, indexOfFirstSmallBlindPrefix);
@@ -41,6 +43,8 @@ public class ConversionUtils {
   }
   
   static double readBigBlind(String handHistory) {
+    
+    handHistory = handHistory.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
     
     int indexOfFirstBigBlindPrefix = handHistory.indexOf(BIG_BLIND_PREFIX);
     int indexOfNextNewLine = handHistory.indexOf(NEWLINE, indexOfFirstBigBlindPrefix);
