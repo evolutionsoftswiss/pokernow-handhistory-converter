@@ -16,7 +16,7 @@ For a quick start you can unzip the release version (without subdirectory, but d
 Execute from the directory with containing 'handhistory-converter-0.1.0-jar-with-dependencies.jar' and the two properties files:
 
 ```
-java -jar handhistory-converter-0.1.0-jar-with-dependencies.jar
+java -jar handhistory-converter-0.2.0-jar-with-dependencies.jar
 ```
 
 The csv files from pokernow.club in the directory should then get converted.

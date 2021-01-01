@@ -15,7 +15,7 @@
 		<fileSet>
 			<directory>target</directory>
 			<includes>
-				<include>handhistory-converter-0.1.0-jar-with-dependencies.jar</include>
+				<include>handhistory-converter-0.2.0-jar-with-dependencies.jar</include>
 			</includes>
 			<outputDirectory>./</outputDirectory>
 		</fileSet>
