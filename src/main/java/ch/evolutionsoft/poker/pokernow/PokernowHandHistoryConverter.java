@@ -48,6 +48,8 @@ public class PokernowHandHistoryConverter {
   
   String currentConversionFileName = StringUtils.EMPTY;
   
+  String conversionErrors = StringUtils.EMPTY;
+  
   PokernowSingleHandConverter singleHandConverter;
   
   public static void main(String[] args) throws IOException {
@@ -82,7 +84,7 @@ public class PokernowHandHistoryConverter {
         String currentHandHistory = FileUtils.readFileToString(
             currentSourceFile, 
             StandardCharsets.UTF_8);
-    
+
         converter.currentConversionFileName = currentSourceFile.getName();
         
         String sortedHandHistory = converter.sortedHandHistoryLines(currentHandHistory);
@@ -126,6 +128,7 @@ public class PokernowHandHistoryConverter {
       
       converterLog.info("Using currencyFactor {}", this.currencyFactor);
       converterLog.info("Using convertOmahaHighHands {}", this.convertOmahaHighHands);
+      converterLog.info("Using convertOmahaHiLoHands {}", this.convertOmahaHighLowHands);
       converterLog.info("Using convertTexasHands {}", this.convertTexasHands);
       
     } catch (FileNotFoundException e) {
@@ -196,7 +199,7 @@ public class PokernowHandHistoryConverter {
       Double convertedAmount2 = Double.parseDouble(secondAmount) / currencyFactor; 
       
       String betFactorConvertedLine = currentLine.replaceFirst(CURRENCY_AMOUNT_REGEX, ESCAPED_CURRENCY + convertedAmount1);
-      betFactorConvertedLine = betFactorConvertedLine.replace(secondAmount, String.valueOf(String.format(AMOUNT_DOUBLE_FORMAT, convertedAmount2)));
+      betFactorConvertedLine = betFactorConvertedLine.replace(DOLLAR_CHAR + secondAmount, DOLLAR_CHAR + String.valueOf(String.format(AMOUNT_DOUBLE_FORMAT, convertedAmount2)));
       
       betFactorConvertedHandHistory += betFactorConvertedLine + System.lineSeparator();
       
@@ -252,6 +255,7 @@ public class PokernowHandHistoryConverter {
   
   String convertHandHistory(String handHistory) throws IOException {
 
+    conversionErrors = StringUtils.EMPTY;
     int indexOfHandEnd = handHistory.indexOf(INTRO_TEXT_END_1);
 
     if (indexOfHandEnd < 0) {
@@ -288,13 +292,28 @@ public class PokernowHandHistoryConverter {
 
       if ( readSingleHand(singleHandHistoryBase) ) {
         
-        convertedHandHistory += singleHandConverter.convertSingleHand(singleHandHistoryBase, handIdPrefix);
+        try {
+          convertedHandHistory += singleHandConverter.convertSingleHand(singleHandHistoryBase, handIdPrefix);
+        
+        } catch (NumberFormatException | StringIndexOutOfBoundsException conversionException) {
+          
+          converterLog.error("Error converting hand {}", singleHandConverter.readHandNumber(singleHandHistoryBase));
+          conversionErrors += singleHandHistoryBase + System.lineSeparator() + System.lineSeparator();
+        }
       }
         
       indexOfSingleHandBegin = convertedHandHistoryBase.indexOf(STARTING_HAND, indexOfSingleHandEnd);
       indexOfSingleHandEnd = convertedHandHistoryBase.indexOf(ENDING_HAND, indexOfSingleHandBegin);
         
     } while (indexOfSingleHandBegin > 0 && indexOfSingleHandEnd > 0);
+    
+
+    if (!conversionErrors.isEmpty()) {
+      
+      String errorHandsFilename = "ErrorHands-" + handIdPrefix + ".txt";
+      FileUtils.write(new File(errorHandsFilename), conversionErrors, StandardCharsets.UTF_8);
+      converterLog.info("Write error file {}", errorHandsFilename);
+    }
 
     return convertedHandHistory;
   }
