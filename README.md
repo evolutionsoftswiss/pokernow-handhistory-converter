@@ -28,7 +28,7 @@ Downloading a recent file from pokernow.club and converting it can enable the HU
 You would just set the auto import folder of PockerTracker4 to a directory with the latest converted file.
 In Hold'em Manager the HUD activation was not possible. It is restrictive about expected programs and the type of hand history files
 
-[[img src=./PokernowHud.png alt=PokernowHUD]]
+![PokernowHUD](https://github.com/evolutionsoftswiss/pokernow-handhistory-converter/blob/develop/PokernowHud.png)
 
 ### Configuring Pokernow Handhistory Converter
 Use conversion.properties and name-mappings.properties to configure the conversion program.
