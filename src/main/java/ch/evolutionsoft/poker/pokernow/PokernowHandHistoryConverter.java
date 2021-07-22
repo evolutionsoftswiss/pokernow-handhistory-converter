@@ -89,7 +89,7 @@ public class PokernowHandHistoryConverter {
         
         String sortedHandHistory = converter.sortedHandHistoryLines(currentHandHistory);
         
-        String convertedHandHistory = converter.convertHandHistory(sortedHandHistory);
+        String convertedHandHistory = converter.convertHandHistory(sortedHandHistory, converter.currentConversionFileName);
         
         if (1 != converter.currencyFactor) {
           
@@ -162,7 +162,7 @@ public class PokernowHandHistoryConverter {
     
     String betFactorConvertedHandHistory = StringUtils.EMPTY;
     
-    do {
+    while (null != currentLine) {
       
       if (currentLine.contains(DOLLAR_SIGN) && !currentLine.contains(POKER_STARS_HAND)) {
         
@@ -180,7 +180,7 @@ public class PokernowHandHistoryConverter {
       
       currentLine = bufferedReader.readLine();
       
-    } while (null != currentLine);
+    };
     
     return betFactorConvertedHandHistory;
   }
@@ -253,14 +253,14 @@ public class PokernowHandHistoryConverter {
     return betFactorConvertedHandHistory;
   }
   
-  String convertHandHistory(String handHistory) throws IOException {
+  String convertHandHistory(String handHistory, String currentFileName) throws IOException {
 
     conversionErrors = StringUtils.EMPTY;
     int indexOfHandEnd = handHistory.indexOf(INTRO_TEXT_END_1);
 
     if (indexOfHandEnd < 0) {
 
-      converterLog.info("No hands to convert found yet");
+      converterLog.info("No hands to convert found yet in {}", currentFileName);
       return StringUtils.EMPTY;
     }
     
@@ -455,7 +455,7 @@ public class PokernowHandHistoryConverter {
     
     for (Map.Entry<Long, String> mapEntry : sortedHandHistoryLines.entrySet()) {
       
-      sortedHandHistory += mapEntry.getValue() + NEWLINE;
+      sortedHandHistory += mapEntry.getValue() + POKERNOW_NEWLINE;
     }
     
     return sortedHandHistory;

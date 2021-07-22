@@ -14,7 +14,7 @@ public final class ConversionConstats {
   public static final String ONE_OR_MORE_DIGITS_REGEX = "\\d+(\\.\\d{1,2})?";
   public static final String ONE_OR_MORE_DIGITS_GROUP_REGEX = "(\\d+)(\\.\\d{1,2})?";
   public static final String ONE_OR_MORE_DIGITS_AND_CHARS_REGEX = "(\\d+)(\\.\\d{1,2})?( and go all in)?\".+";
-  public static final String NEWLINE = "\n";
+  public static final String POKERNOW_NEWLINE = "\n";
   public static final char DOUBLE_POINT = ':';
   public static final String FIRST_REGEX_GROUP_MATCH = "$1";
   public static final String FIRST_AND_SECOND_REGEX_GROUP_MATCH = "$1$2";
