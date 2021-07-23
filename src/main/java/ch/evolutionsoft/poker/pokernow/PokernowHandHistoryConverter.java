@@ -18,6 +18,8 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -337,6 +339,7 @@ public class PokernowHandHistoryConverter {
       
       boolean knownPlayer = false;
       
+      String playerNameRegex = POKERNOW_PLAYER_ALIAS + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
       for (Map.Entry<Object,Object> entry : nameMappingsProperties.entrySet()){
           
         for (String currentPlayerName : playerEntry.getValue()) {
@@ -345,17 +348,18 @@ public class PokernowHandHistoryConverter {
           if (usedNames.contains(currentPlayerName)) {
               
              convertedHandHistory = convertedHandHistory.
-                 replaceAll(POKERNOW_PLAYER_ALIAS + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE,
-                     (String) entry.getKey());
+                 replaceAll(playerNameRegex, (String) entry.getKey());
              knownPlayer = true;
           }
         }
       }
       
       if (!knownPlayer) {
-        convertedHandHistory = convertedHandHistory.
-            replaceAll(POKERNOW_PLAYER_ALIAS + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE,
-                playerEntry.getValue().iterator().next());
+        Pattern playerNamePattern = Pattern.compile(playerNameRegex);
+        Matcher matcher = playerNamePattern.matcher(convertedHandHistory);
+        String quotedPlayerNameReplacement = Matcher.quoteReplacement(
+            playerEntry.getValue().iterator().next());
+        convertedHandHistory = matcher.replaceAll(quotedPlayerNameReplacement);
       }
       
     }
