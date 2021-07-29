@@ -13,7 +13,7 @@ public class ConversionUtils {
   
   static long readIdPrefixFromDatetime(String handHistory) {
     
-    String handHistoryLine = handHistory.substring(0, handHistory.indexOf(NEWLINE));
+    String handHistoryLine = handHistory.substring(0, handHistory.indexOf(POKERNOW_NEWLINE));
     
     String datetime = handHistoryLine.replaceAll(POKERNOW_DATETIME_PATTERN, FIRST_REGEX_GROUP_MATCH);
     
@@ -29,7 +29,7 @@ public class ConversionUtils {
     handHistory = handHistory.replace(AND_GO_ALL_IN, StringUtils.EMPTY);
     
     int indexOfFirstSmallBlindPrefix = handHistory.indexOf(SMALL_BLIND_PREFIX);
-    int indexOfNextNewLine = handHistory.indexOf(NEWLINE, indexOfFirstSmallBlindPrefix);
+    int indexOfNextNewLine = handHistory.indexOf(POKERNOW_NEWLINE, indexOfFirstSmallBlindPrefix);
 
     if (indexOfFirstSmallBlindPrefix < 0) {
       
@@ -47,7 +47,7 @@ public class ConversionUtils {
     handHistory = handHistory.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
     
     int indexOfFirstBigBlindPrefix = handHistory.indexOf(BIG_BLIND_PREFIX);
-    int indexOfNextNewLine = handHistory.indexOf(NEWLINE, indexOfFirstBigBlindPrefix);
+    int indexOfNextNewLine = handHistory.indexOf(POKERNOW_NEWLINE, indexOfFirstBigBlindPrefix);
     
     String bigBlindLinePart = handHistory.substring(indexOfFirstBigBlindPrefix, indexOfNextNewLine);
     String bigBlindAmount = bigBlindLinePart.replaceFirst(BIG_BLIND_PREFIX + ONE_OR_MORE_DIGITS_AND_CHARS_REGEX, FIRST_AND_SECOND_REGEX_GROUP_MATCH);

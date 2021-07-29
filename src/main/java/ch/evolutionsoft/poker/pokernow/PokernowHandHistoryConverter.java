@@ -89,7 +89,7 @@ public class PokernowHandHistoryConverter {
         
         String sortedHandHistory = converter.sortedHandHistoryLines(currentHandHistory);
         
-        String convertedHandHistory = converter.convertHandHistory(sortedHandHistory);
+        String convertedHandHistory = converter.convertHandHistory(sortedHandHistory, converter.currentConversionFileName);
         
         if (1 != converter.currencyFactor) {
           
@@ -162,7 +162,7 @@ public class PokernowHandHistoryConverter {
     
     String betFactorConvertedHandHistory = StringUtils.EMPTY;
     
-    do {
+    while (null != currentLine) {
       
       if (currentLine.contains(DOLLAR_SIGN) && !currentLine.contains(POKER_STARS_HAND)) {
         
@@ -180,7 +180,7 @@ public class PokernowHandHistoryConverter {
       
       currentLine = bufferedReader.readLine();
       
-    } while (null != currentLine);
+    };
     
     return betFactorConvertedHandHistory;
   }
@@ -253,14 +253,14 @@ public class PokernowHandHistoryConverter {
     return betFactorConvertedHandHistory;
   }
   
-  String convertHandHistory(String handHistory) throws IOException {
+  String convertHandHistory(String handHistory, String currentFileName) throws IOException {
 
     conversionErrors = StringUtils.EMPTY;
     int indexOfHandEnd = handHistory.indexOf(INTRO_TEXT_END_1);
 
     if (indexOfHandEnd < 0) {
 
-      converterLog.info("No hands to convert found yet");
+      converterLog.info("No hands to convert found yet in {}", currentFileName);
       return StringUtils.EMPTY;
     }
     
@@ -335,27 +335,34 @@ public class PokernowHandHistoryConverter {
     
     for (Map.Entry<String, Set<String>> playerEntry : playerNamesById.entrySet()) {
       
-      boolean knownPlayer = false;
+      boolean mappedPlayerName = false;
       
       for (Map.Entry<Object,Object> entry : nameMappingsProperties.entrySet()){
           
         for (String currentPlayerName : playerEntry.getValue()) {
-            
+
+          String playerNameOccurance1 = TRIPLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
+          String playerNameOccurance2 = DOUBLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
           List<String> usedNames = Arrays.asList(StringUtils.split(entry.getValue().toString(), COMMA_CHAR));
           if (usedNames.contains(currentPlayerName)) {
               
              convertedHandHistory = convertedHandHistory.
-                 replaceAll(POKERNOW_PLAYER_ALIAS + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE,
-                     (String) entry.getKey());
-             knownPlayer = true;
+                 replace(playerNameOccurance1, (String) entry.getKey());
+             convertedHandHistory = convertedHandHistory.
+                 replace(playerNameOccurance2, (String) entry.getKey());
+             mappedPlayerName = true;
           }
         }
       }
       
-      if (!knownPlayer) {
-        convertedHandHistory = convertedHandHistory.
-            replaceAll(POKERNOW_PLAYER_ALIAS + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE,
-                playerEntry.getValue().iterator().next());
+      if (!mappedPlayerName) {
+
+        for (String currentPlayerName : playerEntry.getValue()) {
+          String playerNameOccurance1 = TRIPLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
+          String playerNameOccurance2 = DOUBLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
+          convertedHandHistory = convertedHandHistory.replace(playerNameOccurance1, currentPlayerName);
+          convertedHandHistory = convertedHandHistory.replace(playerNameOccurance2, currentPlayerName);
+        }
       }
       
     }
@@ -455,7 +462,7 @@ public class PokernowHandHistoryConverter {
     
     for (Map.Entry<Long, String> mapEntry : sortedHandHistoryLines.entrySet()) {
       
-      sortedHandHistory += mapEntry.getValue() + NEWLINE;
+      sortedHandHistory += mapEntry.getValue() + POKERNOW_NEWLINE;
     }
     
     return sortedHandHistory;

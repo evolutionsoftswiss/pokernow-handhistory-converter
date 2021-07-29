@@ -8,6 +8,9 @@ Features
 * Using a folder with converted File(s) as Pocker Tracker Auto-Import folder could enable the HUD in your browser.  
 * Converts pokernow.club csv files to Pokerstars hand history file text format
 
+### Known Limitations
+* Player names containing parantheses '(' or ')' are not supported without mapping in name-mappings.properties
+
 Quick Start
 -----------
 You need a more or less recent Java SE Runtime Environment to run the released program versions. Version 8+ should work.
@@ -82,12 +85,13 @@ folderOfConvertedCsv = \\Users\\username\\PokerNow\\converted
 The nicknames on pokernow.club for you and other players can change often.
 
 The pokernow hand history converter provides name-mappings.properties to handle all nicknames.
+You have to map at least nicknames containing parantheses '(' or ')' to a name on the left preferably without special characters.
 The following lines show *yourUniqueName* and two other lines for your buddy names mapping. On the right side are all known and occuring nicknames present in the csv's. They got mapped to the single names on the left.
 
 The converted hand history file contains then the player names yourUniqueName, buddyName1 and buddyName2. Those names will also be imported from PockerTracker or Hold'em Manager and used there
 
 ```
 yourUniqueName = pokernowNickname0,pokernowNickname10
-buddyName1 = pokernowNickname1,pokernowNickname123
+buddyName1 = pokernow(parantheses)Nickname1
 buddyName2 = pokernowNickname22,pokernowNickname44
 ```

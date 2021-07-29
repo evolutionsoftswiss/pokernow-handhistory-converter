@@ -44,6 +44,15 @@ public class PokernowSingleHandConverter {
     handConversionLog.info("Using yourUniqueName {}", this.yourUniqueName);
   }
 
+  public PokernowSingleHandConverter(boolean readYourHoleCards, String yourUniqueName) {
+
+    this.readYourHoleCards = readYourHoleCards;
+    this.yourUniqueName = yourUniqueName;
+    
+    handConversionLog.info("Using readYourHoleCards {}", this.readYourHoleCards);
+    handConversionLog.info("Using yourUniqueName {}", this.yourUniqueName);
+  }
+
   String convertSingleHand(String singleHandHistoryBase, long handIdPrefix) throws IOException {
     
     this.smallBlindAmount = ConversionUtils.readSmallBlind(singleHandHistoryBase, this.smallBlindAmount);
@@ -65,7 +74,7 @@ public class PokernowSingleHandConverter {
     timeString = timeString.replace(TIME_PREFIX, StringUtils.SPACE);
     String pokerstarsHandLine1 = POKER_STARS_HAND + handIdPrefix + handNumber + DOUBLE_POINT + StringUtils.SPACE + 
         gameType + '(' + DOLLAR_CHAR + smallBlindAmount + FORWARD_SLASH + 
-        DOLLAR_CHAR + bigBlindAmount + " USD" + ')' + " - " + timeString + " CET\n";
+        DOLLAR_CHAR + bigBlindAmount + " USD" + ')' + " - " + timeString + " CET" + System.lineSeparator();
 
     String convertedSingleHandHistory = pokerstarsHandLine1;
 
@@ -85,9 +94,9 @@ public class PokernowSingleHandConverter {
       String buttonPlayerSeat = nextSingleHandHistoryLine.substring(indexOfDealerSeat, indexOfDealerSeat + 3).trim();
       lastButtonPlayerSeat = buttonPlayerSeat;
       lastButtonPlayerName = buttonPlayerName;
-      convertedSingleHandHistory += TABLE_FIREFOX_10_MAX_SEAT + buttonPlayerSeat + " is the button\n";
+      convertedSingleHandHistory += TABLE_FIREFOX_10_MAX_SEAT + buttonPlayerSeat + " is the button" + System.lineSeparator();
     } else {
-      convertedSingleHandHistory += TABLE_FIREFOX_10_MAX_SEAT + lastButtonPlayerSeat + " is the button\n";
+      convertedSingleHandHistory += TABLE_FIREFOX_10_MAX_SEAT + lastButtonPlayerSeat + " is the button" + System.lineSeparator();
     }
     
     String playerSummary = nextSingleHandHistoryLine.substring(
@@ -158,7 +167,7 @@ public class PokernowSingleHandConverter {
           replaceAll(MISSING_SMALL_BLIND_PREFIX + ONE_OR_MORE_DIGITS_GROUP_REGEX, ": posts the ante \\$" + FIRST_AND_SECOND_REGEX_GROUP_MATCH);
 
       missingSmallBlindLine = ConversionUtils.stripDateAndEntryOrderFromCsv(missingSmallBlindLine);
-      
+
       missingSmallBlindsLines += missingSmallBlindLine + System.lineSeparator();
       
       singleHandHistoryLine = bufferedReader.readLine();
@@ -345,7 +354,7 @@ public class PokernowSingleHandConverter {
       String bigBlindPlayerName, String straddlePlayerName, String endBoard, List<String> winningAmounts,
       List<String> winningPlayers) {
     
-    String gameSummary = "Total pot $" + calculateTotalPotFromWinnings(winningAmounts) + " | Rake $0\n";
+    String gameSummary = "Total pot $" + calculateTotalPotFromWinnings(winningAmounts) + " | Rake $0" + System.lineSeparator();
     
     if (!endBoard.isEmpty()) {
       gameSummary += "Board " + endBoard + System.lineSeparator();

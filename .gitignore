@@ -2,3 +2,5 @@
 /.project
 /.settings
 /.classpath
+/poker_now_log*.txt
+/poker_now_log*.csv

@@ -6,12 +6,12 @@ public final class PokerstarsConstants {
     // Hide constructor
   }
   
-  public static final String HOLE_CARDS = "*** HOLE CARDS ***\n";
+  public static final String HOLE_CARDS = "*** HOLE CARDS ***" + System.lineSeparator();
   public static final String FLOP = "*** FLOP ***";
   public static final String TURN = "*** TURN ***";
   public static final String RIVER = "*** RIVER ***";
-  public static final String SHOWDOWN = "*** SHOW DOWN ***\n";
-  public static final String SUMMARY = "*** SUMMARY ***\n";
+  public static final String SHOWDOWN = "*** SHOW DOWN ***" + System.lineSeparator();
+  public static final String SUMMARY = "*** SUMMARY ***" + System.lineSeparator();
   
   public static final String SPADES = "s";
   public static final String HEARTS = "h";
