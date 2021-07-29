@@ -18,8 +18,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -337,29 +335,34 @@ public class PokernowHandHistoryConverter {
     
     for (Map.Entry<String, Set<String>> playerEntry : playerNamesById.entrySet()) {
       
-      boolean knownPlayer = false;
+      boolean mappedPlayerName = false;
       
-      String playerNameRegex = POKERNOW_PLAYER_ALIAS + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
       for (Map.Entry<Object,Object> entry : nameMappingsProperties.entrySet()){
           
         for (String currentPlayerName : playerEntry.getValue()) {
-            
+
+          String playerNameOccurance1 = TRIPLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
+          String playerNameOccurance2 = DOUBLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
           List<String> usedNames = Arrays.asList(StringUtils.split(entry.getValue().toString(), COMMA_CHAR));
           if (usedNames.contains(currentPlayerName)) {
               
              convertedHandHistory = convertedHandHistory.
-                 replaceAll(playerNameRegex, (String) entry.getKey());
-             knownPlayer = true;
+                 replace(playerNameOccurance1, (String) entry.getKey());
+             convertedHandHistory = convertedHandHistory.
+                 replace(playerNameOccurance2, (String) entry.getKey());
+             mappedPlayerName = true;
           }
         }
       }
       
-      if (!knownPlayer) {
-        Pattern playerNamePattern = Pattern.compile(playerNameRegex);
-        Matcher matcher = playerNamePattern.matcher(convertedHandHistory);
-        String quotedPlayerNameReplacement = Matcher.quoteReplacement(
-            playerEntry.getValue().iterator().next());
-        convertedHandHistory = matcher.replaceAll(quotedPlayerNameReplacement);
+      if (!mappedPlayerName) {
+
+        for (String currentPlayerName : playerEntry.getValue()) {
+          String playerNameOccurance1 = TRIPLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
+          String playerNameOccurance2 = DOUBLE_DOUBLE_QUOTE + currentPlayerName + PLAYER_ID_PREFIX +  playerEntry.getKey() + DOUBLE_DOUBLE_QUOTE;
+          convertedHandHistory = convertedHandHistory.replace(playerNameOccurance1, currentPlayerName);
+          convertedHandHistory = convertedHandHistory.replace(playerNameOccurance2, currentPlayerName);
+        }
       }
       
     }

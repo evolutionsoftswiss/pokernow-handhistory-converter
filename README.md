@@ -8,8 +8,8 @@ Features
 * Using a folder with converted File(s) as Pocker Tracker Auto-Import folder could enable the HUD in your browser.  
 * Converts pokernow.club csv files to Pokerstars hand history file text format
 
-### Known Issues
-* Player names containing parantheses '(' or ')' are not supported without mapping and lead to conversion errors
+### Known Limitations
+* Player names containing parantheses '(' or ')' are not supported without mapping in name-mappings.properties
 
 Quick Start
 -----------

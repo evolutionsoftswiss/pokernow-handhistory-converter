@@ -46,7 +46,6 @@ public final class PokernowConstants {
   public static final String TRIPLE_DOUBLE_QUOTE = "\"\"\"";
   public static final String DOUBLE_DOUBLE_QUOTE = "\"\"";
   
-  public static final String POKERNOW_PLAYER_ALIAS = "\"\"[\\S]+";
   public static final String TIME_PREFIX = "T";
   
 }
