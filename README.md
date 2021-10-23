@@ -9,6 +9,7 @@ Features
 * Converts pokernow.club csv files to Pokerstars hand history file text format
 
 ### Known Limitations
+* Only cash games and no tournaments are yet supported
 * Player names containing parantheses '(' or ')' are not supported without mapping in name-mappings.properties
 
 Quick Start
