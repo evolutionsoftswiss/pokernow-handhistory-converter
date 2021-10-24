@@ -9,6 +9,7 @@ Features
 * Converts pokernow.club csv files to Pokerstars hand history file text format
 
 ### Known Limitations
+* Only cash games and no tournaments are yet supported
 * Player names containing parantheses '(' or ')' are not supported without mapping in name-mappings.properties
 
 Quick Start
@@ -17,10 +18,10 @@ You need a more or less recent Java SE Runtime Environment to run the released p
 
 For a quick start you can unzip the release version (without subdirectory, but directly all three files) in a folder where you've already got one or more csv's from pokernow.club.
 
-Execute from the directory with containing 'handhistory-converter-0.2.1-jar-with-dependencies.jar' and the two properties files:
+Execute from the directory with containing 'handhistory-converter-0.2.2-jar-with-dependencies.jar' and the two properties files:
 
 ```
-java -jar handhistory-converter-0.2.1-jar-with-dependencies.jar
+java -jar handhistory-converter-0.2.2-jar-with-dependencies.jar
 ```
 
 The csv files from pokernow.club in the directory should then get converted.

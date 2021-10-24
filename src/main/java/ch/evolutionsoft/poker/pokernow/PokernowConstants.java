@@ -27,7 +27,8 @@ public final class PokernowConstants {
   
   public static final String BUTTON_PREFIX = "dealer: ";
   public static final int BUTTON_PREFIX_LENGTH = BUTTON_PREFIX.length();
-  
+
+  public static final String ANTE_PREFIX = " posts an ante of ";
   public static final String SMALL_BLIND_PREFIX = " posts a small blind of ";
   public static final String BIG_BLIND_PREFIX = " posts a big blind of ";
   public static final String STRADDLE_PREFIX = " posts a straddle of";

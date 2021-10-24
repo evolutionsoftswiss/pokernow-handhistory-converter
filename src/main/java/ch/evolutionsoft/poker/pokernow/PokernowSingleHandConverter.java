@@ -22,7 +22,7 @@ public class PokernowSingleHandConverter {
   
   String lastButtonPlayerName = StringUtils.EMPTY;
   String lastButtonPlayerSeat = StringUtils.EMPTY;
-  
+
   double smallBlindAmount = 1;
   double bigBlindAmount = 1;
   double straddleAmount = 2;
@@ -69,7 +69,7 @@ public class PokernowSingleHandConverter {
     String gameType = singleHandHistoryLine.substring(
         singleHandHistoryLine.indexOf('(') + 1, singleHandHistoryLine.indexOf(')'));
     String timeString = singleHandHistoryLine.substring(
-        singleHandHistoryLine.indexOf(DOUBLE_QUOTE + COMMA_CHAR) + 2, singleHandHistoryLine.indexOf('.'));
+        singleHandHistoryLine.indexOf(DOUBLE_QUOTE + COMMA_CHAR) + 2, singleHandHistoryLine.lastIndexOf('.'));
     timeString = timeString.replace("-", FORWARD_SLASH);
     timeString = timeString.replace(TIME_PREFIX, StringUtils.SPACE);
     String pokerstarsHandLine1 = POKER_STARS_HAND + handIdPrefix + handNumber + DOUBLE_POINT + StringUtils.SPACE + 
@@ -132,6 +132,21 @@ public class PokernowSingleHandConverter {
     if (singleHandHistoryLine.contains(HOLE_CARD_PREFIX)) {
      
       singleHandHistoryLine = bufferedReader.readLine();
+    }
+
+    String anteLines = StringUtils.EMPTY;
+    while (singleHandHistoryLine.contains(ANTE_PREFIX)) {
+
+      singleHandHistoryLine = singleHandHistoryLine.replace(AND_GO_ALL_IN + StringUtils.SPACE, StringUtils.EMPTY);
+      String anteLine = singleHandHistoryLine.
+          replaceAll(ANTE_PREFIX + ONE_OR_MORE_DIGITS_GROUP_REGEX, ": posts the ante \\$" + FIRST_AND_SECOND_REGEX_GROUP_MATCH);
+
+      anteLine = ConversionUtils.stripDateAndEntryOrderFromCsv(anteLine);
+
+      anteLines += anteLine + System.lineSeparator();
+      
+      singleHandHistoryLine = bufferedReader.readLine();
+      
     }
     
     int indexOfSmallBlindPoster = singleHandHistoryLine.indexOf(SMALL_BLIND_PREFIX);
@@ -206,6 +221,12 @@ public class PokernowSingleHandConverter {
       singleHandHistoryLine = bufferedReader.readLine();  
     }
 
+    if (!anteLines.isEmpty()) {
+    
+      convertedSingleHandHistory += anteLines;
+      
+    }
+
     if (!smallBlindLine.isEmpty()) {
     
       convertedSingleHandHistory += smallBlindLine + System.lineSeparator();
@@ -227,9 +248,15 @@ public class PokernowSingleHandConverter {
     if (!missingBigBlindLine.isEmpty()) {
     
       convertedSingleHandHistory += missingBigBlindLine + System.lineSeparator();
-    }  
+    }
     
     convertedSingleHandHistory += HOLE_CARDS;
+    
+    if (this.readYourHoleCards && !this.yourHoleCards.isEmpty()) { 
+      
+      convertedSingleHandHistory += DEALT_TO_HERO + this.yourUniqueName + 
+          StringUtils.SPACE + yourHoleCards + System.lineSeparator();
+    }
 
     String endBoard = StringUtils.EMPTY;
     
@@ -287,12 +314,6 @@ public class PokernowSingleHandConverter {
       }
       
     } while (null != singleHandHistoryLine && !singleHandHistoryLine.contains(COLLECTED));
-    
-    if (this.readYourHoleCards && !this.yourHoleCards.isEmpty()) { 
-      
-      convertedSingleHandHistory += this.yourUniqueName + DOUBLE_POINT + 
-          SHOWS_ACTION + yourHoleCards + System.lineSeparator();
-    }
     
     convertedSingleHandHistory += SHOWDOWN;
     
@@ -453,7 +474,7 @@ public class PokernowSingleHandConverter {
     String showedHand;
     showedHand = showdownAction.substring(
         showdownAction.indexOf(SHOWS_ACTION) + SHOWS_ACTION.length(),
-        showdownAction.indexOf('.'));
+        showdownAction.indexOf('.', showdownAction.indexOf(SHOWS_ACTION)));
      showedHand = OPEN_BRACKET + showedHand + CLOSED_BRACKET;
      
      showdownAction = showdownAction.substring(0, showdownAction.indexOf(SHOWS_ACTION) + SHOWS_ACTION.length()) +
