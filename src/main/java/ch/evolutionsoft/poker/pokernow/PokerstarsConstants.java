@@ -22,6 +22,7 @@ public final class PokerstarsConstants {
   
   public static final String POKER_STARS_HAND = "PokerStars Hand #";
 
+  public static final String DEALT_TO_HERO = "Dealt to ";
   public static final String FOLDS = " folds";
   public static final String CHECKS = " checks";
   public static final String CALLS = " calls ";
