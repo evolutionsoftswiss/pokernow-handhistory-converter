@@ -12,7 +12,6 @@ public final class PokernowConstants {
 
   public static final String STARTING_HAND = "-- starting hand #";
   public static final String ENDING_HAND = "-- ending hand #";
-  public static final String INTRO_TEXT_END_1 = STARTING_HAND + "1 ";
   public static final String INTRO_TEXT_END_2 = "\"Player stacks: ";
   
   public static final String HOLE_CARD_PREFIX = "Your hand is ";

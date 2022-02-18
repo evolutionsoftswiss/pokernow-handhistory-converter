@@ -256,7 +256,7 @@ public class PokernowHandHistoryConverter {
   String convertHandHistory(String handHistory, String currentFileName) throws IOException {
 
     conversionErrors = StringUtils.EMPTY;
-    int indexOfHandEnd = handHistory.indexOf(INTRO_TEXT_END_1);
+    int indexOfHandEnd = handHistory.indexOf(STARTING_HAND);
 
     if (indexOfHandEnd < 0) {
 
