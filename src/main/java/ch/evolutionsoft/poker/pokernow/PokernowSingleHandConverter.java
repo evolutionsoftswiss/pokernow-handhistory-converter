@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -65,9 +67,21 @@ public class PokernowSingleHandConverter {
     String singleHandHistoryLine = bufferedReader.readLine();
 
     String handNumber = readHandNumber(singleHandHistoryLine);
-    
-    String gameType = singleHandHistoryLine.substring(
-        singleHandHistoryLine.indexOf('(') + 1, singleHandHistoryLine.indexOf(')'));
+
+    Pattern gameTypeGameIdPattern = Pattern.compile(
+            "hand " + HAND_NUMBER_PREFIX_CHAR + "\\d+ \\(id: (\\w+)\\)\\s+\\(([^\\)]+)\\)"
+    );
+
+    Matcher m = gameTypeGameIdPattern.matcher(singleHandHistoryLine);
+
+    String pokerNowHandID = "UndefinedGameID";
+    String gameType = "UndefinedGameType";
+
+    if (m.find()) {
+      pokerNowHandID = m.group(1);
+      gameType = m.group(2) + " ";
+    }
+
     String timeString = singleHandHistoryLine.substring(
         singleHandHistoryLine.indexOf(DOUBLE_QUOTE + COMMA_CHAR) + 2, singleHandHistoryLine.lastIndexOf('.'));
     timeString = timeString.replace("-", FORWARD_SLASH);
@@ -365,9 +379,15 @@ public class PokernowSingleHandConverter {
   }
 
   String readHandNumber(String singleHandHistoryLine) {
+    Pattern handNumPattern = Pattern.compile("hand " + HAND_NUMBER_PREFIX_CHAR + "(\\d+)");
 
-    return singleHandHistoryLine.substring(singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR) + 1, 
-        singleHandHistoryLine.indexOf("  ", singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR)));
+    Matcher m = handNumPattern.matcher(singleHandHistoryLine);
+
+    if (m.find()) {
+      return m.group(1);
+    } else {
+      return "UndefinedHandNo";
+    }
   }
 
   String createConvertedHandSummary(String buttonPlayerName, String playerSummary, String smallBlindPlayerName,
