@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.evolutionsoft.poker.pokernow</groupId>
 	<artifactId>handhistory-converter</artifactId>
-	<version>0.2.4-SNAPSHOT</version>
+	<version>0.2.4</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
