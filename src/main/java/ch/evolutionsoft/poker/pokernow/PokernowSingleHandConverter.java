@@ -69,17 +69,16 @@ public class PokernowSingleHandConverter {
     String handNumber = readHandNumber(singleHandHistoryLine);
 
     Pattern gameTypeGameIdPattern = Pattern.compile(
-            "hand " + HAND_NUMBER_PREFIX_CHAR + "\\d+ \\(id: (\\w+)\\)\\s+\\(([^\\)]+)\\)"
+            "hand " + HAND_NUMBER_PREFIX_CHAR + "\\d+ \\(id: \\w+\\)\\s+\\(([^\\)]+)\\)"
     );
 
     Matcher m = gameTypeGameIdPattern.matcher(singleHandHistoryLine);
-
-    String pokerNowHandID = "UndefinedGameID";
     String gameType = "UndefinedGameType";
 
     if (m.find()) {
-      pokerNowHandID = m.group(1);
-      gameType = m.group(2) + " ";
+      gameType = m.group(GAME_TYPE_GROUP) + " ";
+    } else {
+      handConversionLog.warn("Gametype could not be parsed from history line: \"{}\"", singleHandHistoryLine);
     }
 
     String timeString = singleHandHistoryLine.substring(
@@ -379,15 +378,9 @@ public class PokernowSingleHandConverter {
   }
 
   String readHandNumber(String singleHandHistoryLine) {
-    Pattern handNumPattern = Pattern.compile("hand " + HAND_NUMBER_PREFIX_CHAR + "(\\d+)");
 
-    Matcher m = handNumPattern.matcher(singleHandHistoryLine);
-
-    if (m.find()) {
-      return m.group(1);
-    } else {
-      return "UndefinedHandNo";
-    }
+    return singleHandHistoryLine.substring(singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR) + 1, 
+        singleHandHistoryLine.indexOf(" (id"));
   }
 
   String createConvertedHandSummary(String buttonPlayerName, String playerSummary, String smallBlindPlayerName,
