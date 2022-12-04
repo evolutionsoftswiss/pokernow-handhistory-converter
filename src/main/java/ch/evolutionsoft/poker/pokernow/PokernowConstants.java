@@ -9,6 +9,7 @@ public final class PokernowConstants {
   public static final String OMAHA_GAME_TYPE = "Pot Limit Omaha Hi";
   public static final String OMAHA_HI_LO_GAME_TYPE = "Pot Limit Omaha Hi/Lo";
   public static final String TEXAS_GAME_TYPE = "No Limit Texas Hold'em";
+  public static final int GAME_TYPE_GROUP = 1;
 
   public static final String STARTING_HAND = "-- starting hand #";
   public static final String ENDING_HAND = "-- ending hand #";
