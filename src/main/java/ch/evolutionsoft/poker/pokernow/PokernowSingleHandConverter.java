@@ -69,7 +69,7 @@ public class PokernowSingleHandConverter {
     String handNumber = readHandNumber(singleHandHistoryLine);
 
     Pattern gameTypeGameIdPattern = Pattern.compile(
-            "hand " + HAND_NUMBER_PREFIX_CHAR + "\\d+ \\(id: \\w+\\)\\s+\\(([^\\)]+)\\)"
+            "hand " + HAND_NUMBER_PREFIX_CHAR + "\\d+ (\\(id: \\w+\\))?\\s+\\(([^\\)]+)\\)"
     );
 
     Matcher m = gameTypeGameIdPattern.matcher(singleHandHistoryLine);
@@ -380,7 +380,7 @@ public class PokernowSingleHandConverter {
   String readHandNumber(String singleHandHistoryLine) {
 
     return singleHandHistoryLine.substring(singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR) + 1, 
-        singleHandHistoryLine.indexOf(" (id"));
+        singleHandHistoryLine.indexOf(StringUtils.SPACE, singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR)));
   }
 
   String createConvertedHandSummary(String buttonPlayerName, String playerSummary, String smallBlindPlayerName,
