@@ -368,7 +368,7 @@ public class PokernowSingleHandConverter {
     
     convertedSingleHandHistory += SUMMARY;
     
-    String gameSummary = createConvertedHandSummary(buttonPlayerName, playerSummary, smallBlindPlayerName,
+    String gameSummary = createConvertedHandSummary(playerSummary, smallBlindPlayerName,
         bigBlindPlayerName, straddlePlayerName, endBoard, winningAmounts, winningPlayers);
     
     convertedSingleHandHistory += gameSummary + System.lineSeparator() +
@@ -383,10 +383,8 @@ public class PokernowSingleHandConverter {
         singleHandHistoryLine.indexOf(StringUtils.SPACE, singleHandHistoryLine.indexOf(HAND_NUMBER_PREFIX_CHAR)));
   }
 
-  String createConvertedHandSummary(String buttonPlayerName, String playerSummary, String smallBlindPlayerName,
-
-      String bigBlindPlayerName, String straddlePlayerName, String endBoard, List<String> winningAmounts,
-      List<String> winningPlayers) {
+  String createConvertedHandSummary(String playerSummary, String smallBlindPlayerName, String bigBlindPlayerName,
+      String straddlePlayerName, String endBoard, List<String> winningAmounts, List<String> winningPlayers) {
     
     String gameSummary = "Total pot $" + calculateTotalPotFromWinnings(winningAmounts) + " | Rake $0" + System.lineSeparator();
     
@@ -399,8 +397,8 @@ public class PokernowSingleHandConverter {
     for (int n = 0; n < winningPlayers.size(); n++) {
       
       String winningPlayer = winningPlayers.get(n);
-      gameSummary = gameSummary.replace(winningPlayer + " folded",
-          winningPlayer + " collected (" + winningAmounts.get(n) + ")");
+      gameSummary = gameSummary.replace(PLAYER_SUMMARY_SEAT_SEPARATOR + winningPlayer + " folded",
+          PLAYER_SUMMARY_SEAT_SEPARATOR + winningPlayer + " collected (" + winningAmounts.get(n) + ")");
       gameSummary = gameSummary.replace(" showed  and won ", COLLECTED);
     }
     gameSummary = ConversionUtils.replaceTens(gameSummary);

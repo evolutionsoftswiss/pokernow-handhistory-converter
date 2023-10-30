@@ -37,4 +37,5 @@ public final class PokerstarsConstants {
   public static final String SUMMARY_BIG_BLIND = " (big blind)";
   public static final String SUMMARY_STRADDLE = " (straddle)";
   public static final String SHOWED_ACTION = " showed ";
+  public static final String PLAYER_SUMMARY_SEAT_SEPARATOR = ": ";
 }
