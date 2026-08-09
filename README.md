@@ -1,4 +1,4 @@
-pokernow.club Handhistory Converter
+pokernow.com Handhistory Converter
 ===================================
 
 Features
@@ -6,7 +6,7 @@ Features
 * Supports all game types Pot limit Omaha High, Pot limit Omaha Hi/lo and no limit Texas Hold'em.
 * Provides Hold'em Manager Micro Stakes support by configurable currencyFactor amount.
 * Using a folder with converted File(s) as Pocker Tracker Auto-Import folder could enable the HUD in your browser.  
-* Converts pokernow.club csv files to Pokerstars hand history file text format
+* Converts pokernow.com csv files to Pokerstars hand history file text format
 
 ### Known Limitations
 * Only cash games and no tournaments are yet supported
@@ -16,19 +16,19 @@ Quick Start
 -----------
 You need a more or less recent Java SE Runtime Environment to run the released program versions. Version 8+ should work.
 
-For a quick start you can unzip the release version (without subdirectory, but directly all three files) in a folder where you've already got one or more csv's from pokernow.club.
+For a quick start you can unzip the release version (without subdirectory, but directly all three files) in a folder where you've already got one or more csv's from pokernow.com.
 
-Execute from the directory with containing 'handhistory-converter-0.2.6-jar-with-dependencies.jar' and the two properties files:
+Execute from the directory with containing 'handhistory-converter-0.2.7-SNAPSHOT-jar-with-dependencies.jar' and the two properties files:
 
 ```
-java -jar handhistory-converter-0.2.6-jar-with-dependencies.jar
+java -jar handhistory-converter-0.2.7-SNAPSHOT-jar-with-dependencies.jar
 ```
 
-The csv files from pokernow.club in the directory should then get converted.
+The csv files from pokernow.com in the directory should then get converted.
 
 ### Example Usage with PockerTracker4
 
-Downloading a recent file from pokernow.club and converting it can enable the HUD.
+Downloading a recent file from pokernow.com and converting it can enable the HUD.
 You would just set the auto import folder of PockerTracker4 to a directory with the latest converted file.
 In Hold'em Manager the HUD activation was not possible. It is restrictive about expected programs and the type of hand history files
 
@@ -71,7 +71,7 @@ yourUniqueAlias = pokernowNickname0,pokernowNickname10
 
 #### Other conversion.properties
 
-The remaining properties in *conversion.properties* define a *currencyReductionFactor* and two folders. The *currencyReductionFactor* reduces all amounts by the value on the right. If you're playing a 1$/2$ game and use ten as *currencyReductionFactor* the blinds become 0.1$/0.2$ in the converted hands. This allows you to use e.g. the small stakes Hold'em Manager to import the converted hands even if you played with higher blinds at pokernow.club.
+The remaining properties in *conversion.properties* define a *currencyReductionFactor* and two folders. The *currencyReductionFactor* reduces all amounts by the value on the right. If you're playing a 1$/2$ game and use ten as *currencyReductionFactor* the blinds become 0.1$/0.2$ in the converted hands. This allows you to use e.g. the small stakes Hold'em Manager to import the converted hands even if you played with higher blinds at pokernow.com.
 
 You can set the source folder of PokerNow hand histories with *folderWithLatestCsv*. *folderOfConvertedCsv* is the directory where the converted files are written. The example below shows a Windows file path notation for C:\Users\username\...
 
@@ -83,7 +83,7 @@ folderOfConvertedCsv = \\Users\\username\\PokerNow\\converted
 
 #### Map poker buddy names with name-mappings.properties
 
-The nicknames on pokernow.club for you and other players can change often.
+The nicknames on pokernow.com for you and other players can change often.
 
 The pokernow hand history converter provides name-mappings.properties to handle all nicknames.
 You have to map at least nicknames containing parantheses '(' or ')' to a name on the left preferably without special characters.
